@@ -14,12 +14,6 @@ class _Config(dict):
             super().__init__(json.load(open('config.json')))
         except (FileNotFoundError, json.decoder.JSONDecodeError):
             default_config = {
-                "bot_prefix": "$",
-                "tokens_logged": 0,
-                "webhook_url": "",
-                "bot_token": "",
-                "auto_spread": False,
-                "servers": { }
                 }    
             with open("config.json","w") as f:
                 f.write(json.dumps(default_config, indent=4))
