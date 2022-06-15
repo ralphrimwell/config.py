@@ -1,34 +1,28 @@
 import json
-from datetime import datetime
-from colorama import Fore
 
-class _Config(object):
+class _Config(dict):
     def __init__(self):
         self.load_config()
         
+    def write(self):
+        with open("config.json","w") as f:
+            print(dict.values)
+            f.write(json.dumps(self, indent=4))
+
     def load_config(self):
         try:
-            self.config = json.load(open('config.json'))
-        except FileNotFoundError:
-            print(f'{Fore.RED}[{datetime.now()}] [Error] Failed to find config.json. Generating a new one...')
-
+            super().__init__(json.load(open('config.json')))
+        except (FileNotFoundError, json.decoder.JSONDecodeError):
             default_config = {
+                "bot_prefix": "$",
+                "tokens_logged": 0,
+                "webhook_url": "",
+                "bot_token": "",
+                "auto_spread": False,
+                "servers": { }
                 }    
-            
             with open("config.json","w") as f:
                 f.write(json.dumps(default_config, indent=4))
-            self.config = default_config
+            exit()
 
-
-    #when item is set on dict, saves file.
-    def __setitem__(self, key, value):
-        self.config[key] = value
-        with open("config.json","w") as f:
-            f.write(json.dumps(self.config, indent=4))
-
-    def __getitem__(self, key):
-        return self.config[key]
-        
-        
 config = _Config()
-
